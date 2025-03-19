@@ -3,7 +3,6 @@ package com.example.backend.service.impl;
 import org.springframework.stereotype.Service;
 import com.example.backend.dto.EmployeeDto;
 import com.example.backend.entity.Employee;
-import com.example.backend.mapper.EmployeeMapper;
 import com.example.backend.repository.EmployeeRepository;
 import com.example.backend.service.EmployeeService;
 
@@ -19,9 +18,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
 
-        Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+        Employee employee = new Employee();
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+
         Employee savedEmployee = employeeRepository.save(employee);
-        return EmployeeMapper.mapToEmployeeDto(savedEmployee);
+
+        return new EmployeeDto(savedEmployee.getId(), savedEmployee.getFirstName(), savedEmployee.getLastName(), savedEmployee.getEmail());
 
     }
 
