@@ -3,6 +3,8 @@ package com.example.backend.service.impl;
 import org.springframework.stereotype.Service;
 import com.example.backend.dto.EmployeeDto;
 import com.example.backend.entity.Employee;
+import com.example.backend.exception.ResourceNotFoundException;
+import com.example.backend.mapper.EmployeeMapper;
 import com.example.backend.repository.EmployeeRepository;
 import com.example.backend.service.EmployeeService;
 
@@ -27,6 +29,14 @@ public class EmployeeServiceImpl implements EmployeeService{
 
         return new EmployeeDto(savedEmployee.getId(), savedEmployee.getFirstName(), savedEmployee.getLastName(), savedEmployee.getEmail());
 
+    }
+
+    @Override
+    public EmployeeDto getEmployeeId(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+            .orElseThrow(() ->
+                new ResourceNotFoundException("Employee is not exists with given id : " + employeeId));
+        return EmployeeMapper.mapToEmployeeDto(employee);
     }
 
 }
